@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Salcash",
+    "description": "API documentation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api"
+    },
+    {
+      "url": "https://localhost:5000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Company",
+      "description": "Endpoints for company data management"
+    },
+    {
+      "name": "CompanyLocation",
+      "description": "Endpoints for company Location data management"
+    },
+    {
+      "name": "CompanyDepartment",
+      "description": "Endpoints for company Department data management"
+    }
+  ],
+  "paths": {
+    "/company/": {
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Endpoint to handle create company.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Endpoint to retrieve all company.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/company/{id}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Endpoint to retrieve company.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Endpoint to update company.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/companyLocation/": {
+      "post": {
+        "tags": [
+          "CompanyLocation"
+        ],
+        "description": "Endpoint to handle create company location.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/companyLocation/{id}": {
+      "put": {
+        "tags": [
+          "CompanyLocation"
+        ],
+        "description": "Endpoint to update company location.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/companyDepartment/": {
+      "post": {
+        "tags": [
+          "CompanyDepartment"
+        ],
+        "description": "Endpoint to handle create company department.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/companyDepartment/{id}": {
+      "put": {
+        "tags": [
+          "CompanyDepartment"
+        ],
+        "description": "Endpoint to update company department.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,239 @@
+const createTableQuery = `
+    CREATE TABLE company (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(500) UNIQUE NOT NULL,
+    nick_name VARCHAR(50),
+    industry TEXT NOT NULL,
+    address LONGTEXT,
+    business_registration_number VARCHAR(255) UNIQUE NOT NULL,
+    type_of_incorporation ENUM('public limited', 'private limited', 'sole proprietor', 'partnership', 'others') NOT NULL,
+    date_of_incorporation DATE NOT NULL,
+    company_contact_number BIGINT,
+    company_email VARCHAR(255),
+    notes LONGTEXT,
+    status BOOLEAN DEFAULT TRUE,
+    relam_key VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+  `;
+
+  connection.query(createTableQuery);
+
+  const createTableQuery2 = `
+    CREATE TABLE company_location (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    name VARCHAR(255),
+    nick_name VARCHAR(255),
+    contact_name VARCHAR(255),
+    contact_number VARCHAR(255),
+    address LONGTEXT,
+    FOREIGN KEY (company_id) REFERENCES company(_id)
+);
+  `;
+
+  connection.query(createTableQuery2);
+
+  const createTableQuery3 = `
+    CREATE TABLE company_department (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    name VARCHAR(255),
+    name_of_hod VARCHAR(255),
+    contact_number VARCHAR(255),
+    description LONGTEXT,
+    FOREIGN KEY (company_id) REFERENCES company(_id)
+);
+  `;
+
+  connection.query(createTableQuery3);
+
+
+  const createTableQuery4 = `
+    CREATE TABLE company_carder (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    name VARCHAR(255),
+    description LONGTEXT,
+    FOREIGN KEY (company_id) REFERENCES company(_id)
+);
+  `;
+
+  connection.query(createTableQuery4);
+
+  const createTableQuery5 = `
+    CREATE TABLE company_location_configuration (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    location_id INT,
+    department_id INT,
+    carder_id INT,
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+    FOREIGN KEY (location_id) REFERENCES company_location(_id),
+    FOREIGN KEY (department_id) REFERENCES company_department(_id),
+    FOREIGN KEY (carder_id) REFERENCES company_carder(_id),
+    UNIQUE (company_id, location_id, department_id, carder_id)
+);
+  `;
+
+  connection.query(createTableQuery5);
+
+    const createTableQuery6 = `
+    CREATE TABLE company_configuration (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    company_location_configuration_id INT,
+    bank_id INT NOT NULL,
+    bank_company_configuration_id INT NOT NULL,
+    bank_company_status BOOLEAN DEFAULT TRUE,
+    max_percentage_override INT NOT NULL,
+    withdrawal_form DATE,
+    withdrawal_to DATE,
+    salary_date DATE NOT NULL,
+    month_start DATE NOT NULL,
+    month_end DATE NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+    FOREIGN KEY (company_location_configuration_id) REFERENCES company_location_configuration(_id)
+);
+  `;
+
+  connection.query(createTableQuery6);
+
+
+//new
+
+   const createTableQuery7 = `
+  CREATE TABLE employee (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    nic VARCHAR(255) UNIQUE NOT NULL,
+    date_of_birth DATE,
+    email VARCHAR(50),
+    contact_number VARCHAR(255),
+    status BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  );
+`;
+
+connection.query(createTableQuery7);
+
+ const createTableQuery8 = `
+  CREATE TABLE employee_summary (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    data JSON
+  );
+`;
+
+connection.query(createTableQuery8);
+
+ const createTableQuery9 = `
+  CREATE TABLE employee_details (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    employee_id INT,
+    employee_summary_id INT,
+    company_location_configuration_id INT,
+    employee_number VARCHAR(255) NOT NULL UNIQUE,
+    employee_status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
+    employee_salary VARCHAR(255),
+    bank_name VARCHAR(255),
+    bank_branch VARCHAR(255),
+    account_number VARCHAR(255),
+    notes VARCHAR(255),
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(_id),
+    FOREIGN KEY (employee_summary_id) REFERENCES employee_summary(_id),
+    FOREIGN KEY (company_location_configuration_id) REFERENCES company_location_configuration(_id)
+  );
+`;
+
+connection.query(createTableQuery9);
+
+const createTableQuery10 = `
+  CREATE TABLE company_approval (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    employee_id INT,
+    employee_details_id INT,
+    approval_type ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
+    related_table VARCHAR(255),
+    proposed_changes_description VARCHAR(255),
+    details VARCHAR(255),
+    approval_status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(_id),
+    FOREIGN KEY (employee_details_id) REFERENCES employee_details(_id),
+  );
+`;
+
+connection.query(createTableQuery10);
+
+const createTableQuery11 = `
+   CREATE TABLE advance_request (
+    _id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    employee_id INT,
+    employee_details_id INT,
+    request_amount INT,
+    approved_amount INT,
+    request_date DATE,
+    approve_date DATE,
+    company_comment VARCHAR(255),
+    bank_comment VARCHAR(255),
+    transfer_status BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+    FOREIGN KEY (employee_id) REFERENCES employee(_id),
+    FOREIGN KEY (employee_details_id) REFERENCES employee_details(_id)
+  );
+`;
+
+connection.query(createTableQuery11);
+
+const createTableQuery12 = `
+   CREATE TABLE loginUser (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    company_id INT,
+    FOREIGN KEY (company_id) REFERENCES company(_id),
+  );
+`;
+
+connection.query(createTableQuery12);
+
+const createTableQuery13 = `
+   CREATE TABLE company_contact_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    name VARCHAR(255) NOT NULL,
+    designation VARCHAR(255),
+    email VARCHAR(50),
+    phone_1 VARCHAR(50),
+    phone_2 VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES company(_id)
+  );
+`;
+
+connection.query(createTableQuery13);
+
+const createTableQuery14 = `
+   CREATE TABLE data_mapping (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT,
+    your_column_name VARCHAR(255) NOT NULL,
+    their_column_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES company(_id)
+  );
+`;
+
+connection.query(createTableQuery14);
